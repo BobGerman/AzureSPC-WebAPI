@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using REManager.Models;
 
 namespace REManager.Controllers
 {
@@ -13,16 +14,18 @@ namespace REManager.Controllers
     {
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<REProperty> Get()
         {
-            return new string[] { "value1", "value2" };
+            var mock = new MockData();
+            return mock.getAllProperties();
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public REProperty Get(int id)
         {
-            return "value";
+            var mock = new MockData();
+            return mock.getProperty(id);
         }
 
         // POST api/values
