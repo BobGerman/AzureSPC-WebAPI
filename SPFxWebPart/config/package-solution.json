@@ -1,0 +1,12 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "test-web-api-client-side-solution",
+    "id": "0684c874-bead-47e1-ab55-ba257c491a18",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true
+  },
+  "paths": {
+    "zippedPackage": "solution/test-web-api.sppkg"
+  }
+}
