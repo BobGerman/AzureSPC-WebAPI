@@ -12,7 +12,8 @@ import TestWebApi from './components/TestWebApi';
 import { ITestWebApiProps } from './components/ITestWebApiProps';
 
 export interface ITestWebApiWebPartProps {
-  description: string;
+  clientId: string;
+  endpointUrl: string;
 }
 
 export default class TestWebApiWebPart extends BaseClientSideWebPart<ITestWebApiWebPartProps> {
@@ -21,7 +22,8 @@ export default class TestWebApiWebPart extends BaseClientSideWebPart<ITestWebApi
     const element: React.ReactElement<ITestWebApiProps > = React.createElement(
       TestWebApi,
       {
-        description: this.properties.description
+        description: this.properties.clientId + ' ' +
+                     this.properties.endpointUrl
       }
     );
 
@@ -43,8 +45,11 @@ export default class TestWebApiWebPart extends BaseClientSideWebPart<ITestWebApi
             {
               groupName: strings.BasicGroupName,
               groupFields: [
-                PropertyPaneTextField('description', {
-                  label: strings.DescriptionFieldLabel
+                PropertyPaneTextField('clientId', {
+                  label: strings.ClientIdFieldLabel
+                }),
+                PropertyPaneTextField('endpointUrl', {
+                  label: strings.EndpointUrlFieldLabel
                 })
               ]
             }

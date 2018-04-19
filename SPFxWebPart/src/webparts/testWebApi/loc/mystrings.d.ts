@@ -1,7 +1,8 @@
 declare interface ITestWebApiWebPartStrings {
   PropertyPaneDescription: string;
   BasicGroupName: string;
-  DescriptionFieldLabel: string;
+  ClientIdFieldLabel: string;
+  EndpointUrlFieldLabel: string;
 }
 
 declare module 'TestWebApiWebPartStrings' {
