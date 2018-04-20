@@ -10,6 +10,8 @@ import {
 import * as strings from 'TestWebApiWebPartStrings';
 import TestWebApi from './components/TestWebApi';
 import { ITestWebApiProps } from './components/ITestWebApiProps';
+import Exception from './components/Exception';
+import { IExceptionProps } from './components/IExceptionProps';
 
 import { IReProperty } from './model/IReProperty';
 import { IReManagerService } from './service/IReManagerService';
@@ -28,22 +30,37 @@ export default class TestWebApiWebPart extends BaseClientSideWebPart<ITestWebApi
 
     if (this.properties.clientId && this.properties.endpointUrl) {
       service.getReProperties(this.context,
-                              this.context.serviceScope,
-                              this.properties.clientId,
-                              this.properties.endpointUrl)
-      .then ((reProperties: IReProperty[]) => {
+        this.context.serviceScope,
+        this.properties.clientId,
+        this.properties.endpointUrl)
+        .then((reProperties: IReProperty[]) => {
 
-        const element: React.ReactElement<ITestWebApiProps > = React.createElement(
-          TestWebApi,
-          {
-            reProperties: reProperties
-          }
-        );
-    
-        ReactDom.render(element, this.domElement);  
-      })
+          const element: React.ReactElement<ITestWebApiProps> = React.createElement(
+            TestWebApi,
+            {
+              reProperties: reProperties
+            }
+          );
+
+          ReactDom.render(element, this.domElement);
+        })
+        .catch((message: string) => {
+          const element: React.ReactElement<IExceptionProps> = React.createElement(
+            Exception,
+            {
+              message: message
+            }
+          );
+          ReactDom.render(element, this.domElement);
+        });
     } else {
-      
+      const element: React.ReactElement<IExceptionProps> = React.createElement(
+        Exception,
+        {
+          message: 'Please edit the web part and enter the client ID and endpoint URL'
+        }
+      );
+      ReactDom.render(element, this.domElement);
     }
   }
 

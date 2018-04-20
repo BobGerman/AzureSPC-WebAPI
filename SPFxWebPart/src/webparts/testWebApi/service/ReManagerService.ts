@@ -26,7 +26,7 @@ export default class ReManagerService implements IReManagerService {
                  resolve(reProperties);
             })
             .catch((error: any)=> {
-                reject(error);
+                reject(error.message);
             });
         });
 
