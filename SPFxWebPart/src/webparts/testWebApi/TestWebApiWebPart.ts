@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import { Version } from '@microsoft/sp-core-library';
+import { Version, Environment } from '@microsoft/sp-core-library';
 import {
   BaseClientSideWebPart,
   IPropertyPaneConfiguration,
@@ -11,6 +11,10 @@ import * as strings from 'TestWebApiWebPartStrings';
 import TestWebApi from './components/TestWebApi';
 import { ITestWebApiProps } from './components/ITestWebApiProps';
 
+import { IReProperty } from './model/IReProperty';
+import { IReManagerService } from './service/IReManagerService';
+import { ReManagerServiceFactory } from './service/ReManagerServiceFactory';
+
 export interface ITestWebApiWebPartProps {
   clientId: string;
   endpointUrl: string;
@@ -19,15 +23,25 @@ export interface ITestWebApiWebPartProps {
 export default class TestWebApiWebPart extends BaseClientSideWebPart<ITestWebApiWebPartProps> {
 
   public render(): void {
-    const element: React.ReactElement<ITestWebApiProps > = React.createElement(
-      TestWebApi,
-      {
-        description: this.properties.clientId + ' ' +
-                     this.properties.endpointUrl
-      }
-    );
 
-    ReactDom.render(element, this.domElement);
+    const service = ReManagerServiceFactory.getService(Environment.type);
+
+    service.getReProperties(this.context,
+                            this.properties.clientId,
+                            this.properties.endpointUrl)
+    .then ((reProperties: IReProperty[]) => {
+
+      const element: React.ReactElement<ITestWebApiProps > = React.createElement(
+        TestWebApi,
+        {
+          description: reProperties[0].name
+        }
+      );
+  
+      ReactDom.render(element, this.domElement);
+  
+    });
+
   }
 
   protected get dataVersion(): Version {
