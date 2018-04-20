@@ -9,7 +9,7 @@ export default class Exception extends React.Component<IExceptionProps, {}> {
       <div className={ styles.testWebApi }>
         <div className={ styles.container }>
           <div className={ styles.row }>
-            <span className={ styles.column }>
+            <span className={ styles.exceptionColumn }>
               { escape(this.props.message) }
             </span>
           </div>

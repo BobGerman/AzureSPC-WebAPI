@@ -22,6 +22,16 @@
     @include ms-lgPush1;
   }
 
+  .exceptionColumn {
+    @include ms-Grid-col;
+    @include ms-sm12;
+    @include ms-sm12;
+    background-color: darkred;
+    padding: 5px;
+    @include ms-xlPush2;
+    @include ms-lgPush1;
+  }
+
   .title {
     @include ms-font-xl;
     @include ms-fontColor-white;
