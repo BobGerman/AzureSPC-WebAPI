@@ -4,7 +4,14 @@
     "name": "test-web-api-client-side-solution",
     "id": "0684c874-bead-47e1-ab55-ba257c491a18",
     "version": "1.0.0.0",
-    "includeClientSideAssets": true
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "webApiPermissionRequests": [
+      {
+        "resource": "REManager",
+        "scope": "user_impersonation"
+      }
+    ]
   },
   "paths": {
     "zippedPackage": "solution/test-web-api.sppkg"

@@ -26,22 +26,25 @@ export default class TestWebApiWebPart extends BaseClientSideWebPart<ITestWebApi
 
     const service = ReManagerServiceFactory.getService(Environment.type);
 
-    service.getReProperties(this.context,
-                            this.properties.clientId,
-                            this.properties.endpointUrl)
-    .then ((reProperties: IReProperty[]) => {
+    if (this.properties.clientId && this.properties.endpointUrl) {
+      service.getReProperties(this.context,
+                              this.context.serviceScope,
+                              this.properties.clientId,
+                              this.properties.endpointUrl)
+      .then ((reProperties: IReProperty[]) => {
 
-      const element: React.ReactElement<ITestWebApiProps > = React.createElement(
-        TestWebApi,
-        {
-          reProperties: reProperties
-        }
-      );
-  
-      ReactDom.render(element, this.domElement);
-  
-    });
-
+        const element: React.ReactElement<ITestWebApiProps > = React.createElement(
+          TestWebApi,
+          {
+            reProperties: reProperties
+          }
+        );
+    
+        ReactDom.render(element, this.domElement);  
+      })
+    } else {
+      
+    }
   }
 
   protected get dataVersion(): Version {

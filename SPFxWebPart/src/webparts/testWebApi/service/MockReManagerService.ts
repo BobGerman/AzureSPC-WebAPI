@@ -1,10 +1,14 @@
 import { IReProperty } from '../model/IReProperty';
 import { IReManagerService } from './IReManagerService';
 import { IWebPartContext } from '@microsoft/sp-webpart-base';
+import { ServiceScope } from '@microsoft/sp-core-library';
 
 export default class MockReManagerService implements IReManagerService {
     
-    public getReProperties (context: IWebPartContext, clientId: string, endpointUrl: string):
+    public getReProperties (context: IWebPartContext,
+                            serviceScope: ServiceScope,
+                            clientId: string, 
+                            endpointUrl: string):
         Promise<IReProperty[] | string> {
 
         return new Promise<IReProperty[]> ((resolve => {
