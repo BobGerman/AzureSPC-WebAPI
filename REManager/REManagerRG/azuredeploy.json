@@ -2,6 +2,14 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "repoURL": {
+      "type": "string",
+      "defaultValue": "https://github.com/BobGerman/AzureSPC-WebAPI.git"
+    },
+    "branch": {
+      "type": "string",
+      "defaultValue": "Step03a-ContinuousDeployment"
+    },
     "appServicePlanSkuName": {
       "type": "string",
       "defaultValue": "F1",
@@ -22,7 +30,8 @@
       "metadata": {
         "description": "Describes plan's pricing tier and capacity. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
       }
-    }},
+    }
+  },
   "variables": {
     "appServicePlanName": "[concat('REMgrAppServicePlan', uniqueString(resourceGroup().id))]",
     "webApiName": "[concat('REMgrWebApi', uniqueString(resourceGroup().id))]"
@@ -67,7 +76,23 @@
             ]
           }
         }
-      }
-    }],
+      },
+      "resources": [
+        {
+          "name": "web",
+          "type": "sourcecontrols",
+          "apiVersion": "2015-08-01",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', variables('webApiName'))]"
+          ],
+          "properties": {
+            "RepoUrl": "[parameters('repoURL')]",
+            "branch": "[parameters('branch')]",
+            "IsManualIntegration": true
+          }
+        }
+      ]
+    }
+  ],
   "outputs": {}
 }
