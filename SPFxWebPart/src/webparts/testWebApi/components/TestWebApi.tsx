@@ -8,16 +8,15 @@ export default class TestWebApi extends React.Component<ITestWebApiProps, {}> {
     return (
       <div className={ styles.testWebApi }>
         <div className={ styles.container }>
+          { this.props.reProperties.map(p => (
           <div className={ styles.row }>
-            <div className={ styles.column }>
-              <span className={ styles.title }>Welcome to SharePoint!</span>
-              <p className={ styles.subTitle }>Customize SharePoint experiences using Web Parts.</p>
-              <p className={ styles.description }>{escape(this.props.description)}</p>
-              <a href="https://aka.ms/spfx" className={ styles.button }>
-                <span className={ styles.label }>Learn more</span>
-              </a>
-            </div>
+            <span className={ styles.column }>{escape(p.name)}</span>
+            <span className={ styles.column }>{escape(p.address)}</span>
+            <span className={ styles.column }>{escape(p.city)},
+              {escape(p.state)} {escape(p.postalCode)}
+            </span>
           </div>
+          )) }
         </div>
       </div>
     );

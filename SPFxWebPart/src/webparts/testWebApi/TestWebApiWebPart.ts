@@ -34,7 +34,7 @@ export default class TestWebApiWebPart extends BaseClientSideWebPart<ITestWebApi
       const element: React.ReactElement<ITestWebApiProps > = React.createElement(
         TestWebApi,
         {
-          description: reProperties[0].name
+          reProperties: reProperties
         }
       );
   

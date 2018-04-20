@@ -11,13 +11,13 @@
     @include ms-Grid-row;
     @include ms-fontColor-white;
     background-color: $ms-color-themeDark;
-    padding: 20px;
+    padding: 3px;
   }
 
   .column {
     @include ms-Grid-col;
-    @include ms-lg10;
-    @include ms-xl8;
+    @include ms-lg3;
+    @include ms-xl2;
     @include ms-xlPush2;
     @include ms-lgPush1;
   }

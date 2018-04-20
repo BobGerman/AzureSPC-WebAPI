@@ -1,3 +1,5 @@
+import { IReProperty } from '../model/IReProperty';
+
 export interface ITestWebApiProps {
-  description: string;
+  reProperties: IReProperty[];
 }
