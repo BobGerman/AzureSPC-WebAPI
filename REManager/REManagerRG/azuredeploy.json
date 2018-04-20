@@ -59,7 +59,14 @@
       },
       "properties": {
         "name": "[variables('webApiName')]",
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+        "siteConfig": {
+          "cors": {
+            "allowedOrigins": [
+              "*.sharepoint.com"
+            ]
+          }
+        }
       }
     }],
   "outputs": {}
