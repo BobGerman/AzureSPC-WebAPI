@@ -8,7 +8,7 @@
     },
     "branch": {
       "type": "string",
-      "defaultValue": "xxt"
+      "defaultValue": "Master"
     },
     "appServicePlanSkuName": {
       "type": "string",
