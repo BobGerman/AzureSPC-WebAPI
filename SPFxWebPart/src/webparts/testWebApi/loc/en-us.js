@@ -3,6 +3,9 @@ define([], function() {
     "PropertyPaneDescription": "Description",
     "BasicGroupName": "Group Name",
     "ClientIdFieldLabel": "Client ID",
-    "EndpointUrlFieldLabel": "Endpoint URL"
+    "EndpointUrlFieldLabel": "Endpoint URL",
+    "DataSourceFieldLabel": "Data source",
+    "MockDataSourceLabel": "Mock data from web service",
+    "SqlDataSourceLabel": "Data from Azure SQL"
   }
 });

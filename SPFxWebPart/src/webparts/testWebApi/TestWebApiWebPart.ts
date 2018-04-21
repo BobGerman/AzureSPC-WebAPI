@@ -4,7 +4,8 @@ import { Version, Environment } from '@microsoft/sp-core-library';
 import {
   BaseClientSideWebPart,
   IPropertyPaneConfiguration,
-  PropertyPaneTextField
+  PropertyPaneTextField,
+  PropertyPaneChoiceGroup
 } from '@microsoft/sp-webpart-base';
 
 import * as strings from 'TestWebApiWebPartStrings';
@@ -20,6 +21,7 @@ import { ReManagerServiceFactory } from './service/ReManagerServiceFactory';
 export interface ITestWebApiWebPartProps {
   clientId: string;
   endpointUrl: string;
+  dataSource: string;
 }
 
 export default class TestWebApiWebPart extends BaseClientSideWebPart<ITestWebApiWebPartProps> {
@@ -28,11 +30,15 @@ export default class TestWebApiWebPart extends BaseClientSideWebPart<ITestWebApi
 
     const service = ReManagerServiceFactory.getService(Environment.type);
 
+    let endpointUrl = this.properties.endpointUrl +
+      ((this.properties.dataSource === "mock") ?
+        "/api/values" :
+        "/api/REProperties");
     if (this.properties.clientId && this.properties.endpointUrl) {
       service.getReProperties(this.context,
         this.context.serviceScope,
         this.properties.clientId,
-        this.properties.endpointUrl)
+        endpointUrl)
         .then((reProperties: IReProperty[]) => {
 
           const element: React.ReactElement<ITestWebApiProps> = React.createElement(
@@ -84,6 +90,13 @@ export default class TestWebApiWebPart extends BaseClientSideWebPart<ITestWebApi
                 }),
                 PropertyPaneTextField('endpointUrl', {
                   label: strings.EndpointUrlFieldLabel
+                }),
+                PropertyPaneChoiceGroup('dataSource', {
+                  label: strings.DataSourceFieldLabel,
+                  options: [
+                    { key: "mock", text: strings.MockDataSourceLabel },
+                    { key: "sql", text: strings.SqlDataSourceLabel }
+                  ]
                 })
               ]
             }

@@ -18,8 +18,13 @@ export default class ReManagerService implements IReManagerService {
 
         const result = new Promise<IReProperty[] | string>((resolve, reject) => {
 
-            aadClient.get(endpointUrl + "/api/values", AadHttpClient.configurations.v1)
+            aadClient.get(endpointUrl, AadHttpClient.configurations.v1)
             .then((res: any): Promise<any> => {
+                if (!res.ok) {
+                    throw {
+                        message: "Error " + res.status + " - " + res.statusText
+                    };
+                }
                 return res.json();
             })
             .then((reProperties: IReProperty[]): void => {
