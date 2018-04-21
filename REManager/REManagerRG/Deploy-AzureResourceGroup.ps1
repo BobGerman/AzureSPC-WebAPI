@@ -11,7 +11,9 @@ Param(
     [string] $ArtifactStagingDirectory = '.',
     [string] $DSCSourceFolder = 'DSC',
     [switch] $ValidateOnly,
-	[string] $Branch = "Master"
+	[string] $Branch = 'Master',
+	[string] $SqlAdminUsername = 'sa',
+	[string] $SqlAdminPassword = ''
 )
 
 try {
@@ -112,6 +114,8 @@ else {
                                        -TemplateParameterFile $TemplateParametersFile `
                                        @OptionalParameters `
 									   -Branch $Branch `
+									   -SqlAdminUsername $SqlAdminUsername `
+									   -SqlAdminPassword $SqlAdminPassword `
                                        -Force -Verbose `
                                        -ErrorVariable ErrorMessages
     if ($ErrorMessages) {

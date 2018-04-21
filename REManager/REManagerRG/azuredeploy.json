@@ -10,6 +10,13 @@
       "type": "string",
       "defaultValue": "Master"
     },
+    "sqlAdminUsername": {
+      "type": "string",
+      "defaultValue": "sa"
+    },
+    "sqlAdminPassword": {
+      "type": "string"
+    },
     "appServicePlanSkuName": {
       "type": "string",
       "defaultValue": "S1",
