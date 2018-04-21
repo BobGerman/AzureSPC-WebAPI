@@ -71,9 +71,7 @@
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
         "siteConfig": {
           "cors": {
-            "allowedOrigins": [
-              "*.sharepoint.com"
-            ]
+            "allowedOrigins": [ "*" ]
           }
         }
       },
