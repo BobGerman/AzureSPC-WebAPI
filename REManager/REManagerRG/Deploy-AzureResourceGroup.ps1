@@ -12,7 +12,7 @@ Param(
     [string] $DSCSourceFolder = 'DSC',
     [switch] $ValidateOnly,
 	[string] $Branch = 'Master',
-	[string] $SqlAdminUsername = 'sa',
+	[string] $SqlAdminUsername = 'reMgrSqlAdmin',
 	[string] $SqlAdminPassword = ''
 )
 
@@ -114,8 +114,8 @@ else {
                                        -TemplateParameterFile $TemplateParametersFile `
                                        @OptionalParameters `
 									   -Branch $Branch `
-									   -SqlAdminUsername $SqlAdminUsername `
-									   -SqlAdminPassword $SqlAdminPassword `
+									   -remgrsqlserverAdminLogin $SqlAdminUsername `
+									   -remgrsqlserverAdminLoginPassword $SqlAdminPassword `
                                        -Force -Verbose `
                                        -ErrorVariable ErrorMessages
     if ($ErrorMessages) {

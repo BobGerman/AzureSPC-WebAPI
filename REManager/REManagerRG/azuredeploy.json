@@ -10,11 +10,11 @@
       "type": "string",
       "defaultValue": "Master"
     },
-    "sqlAdminUsername": {
+    "remgrsqlserverAdminLogin": {
       "type": "string",
-      "defaultValue": "sa"
+      "minLength": 1
     },
-    "sqlAdminPassword": {
+    "remgrsqlserverAdminLoginPassword": {
       "type": "string"
     },
     "appServicePlanSkuName": {
@@ -37,11 +37,47 @@
       "metadata": {
         "description": "Describes plan's pricing tier and capacity. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
       }
+    },
+    "reMgrDBName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue":  "REMgrDB"
+    },
+    "reMgrDBCollation": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
+    },
+    "reMgrDBEdition": {
+      "type": "string",
+      "defaultValue": "Basic",
+      "allowedValues": [
+        "Basic",
+        "Standard",
+        "Premium"
+      ]
+    },
+    "reMgrDBRequestedServiceObjectiveName": {
+      "type": "string",
+      "defaultValue": "Basic",
+      "allowedValues": [
+        "Basic",
+        "S0",
+        "S1",
+        "S2",
+        "P1",
+        "P2",
+        "P3"
+      ],
+      "metadata": {
+        "description": "Describes the performance level for Edition"
+      }
     }
   },
   "variables": {
     "appServicePlanName": "[concat('REMgrAppServicePlan', uniqueString(resourceGroup().id))]",
-    "webApiName": "[concat('REMgrWebApi', uniqueString(resourceGroup().id))]"
+    "webApiName": "[concat('REMgrWebApi', uniqueString(resourceGroup().id))]",
+    "remgrsqlserverName": "[concat('remgrsqlserver', uniqueString(resourceGroup().id))]"
   },
   "resources": [
     {
@@ -94,6 +130,53 @@
             "RepoUrl": "[parameters('repoURL')]",
             "branch": "[parameters('branch')]",
             "IsManualIntegration": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "[variables('remgrsqlserverName')]",
+      "type": "Microsoft.Sql/servers",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2014-04-01-preview",
+      "dependsOn": [ ],
+      "tags": {
+        "displayName": "remgrsqlserver"
+      },
+      "properties": {
+        "administratorLogin": "[parameters('remgrsqlserverAdminLogin')]",
+        "administratorLoginPassword": "[parameters('remgrsqlserverAdminLoginPassword')]"
+      },
+      "resources": [
+        {
+          "name": "AllowAllWindowsAzureIps",
+          "type": "firewallrules",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2014-04-01-preview",
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('remgrsqlserverName'))]"
+          ],
+          "properties": {
+            "startIpAddress": "0.0.0.0",
+            "endIpAddress": "0.0.0.0"
+          }
+        },
+        {
+          "name": "[parameters('reMgrDBName')]",
+          "type": "databases",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2014-04-01-preview",
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('remgrsqlserverName'))]"
+          ],
+          "tags": {
+            "displayName": "reMgrDB"
+          },
+          "properties": {
+            "collation": "[parameters('reMgrDBCollation')]",
+            "edition": "[parameters('reMgrDBEdition')]",
+            "maxSizeBytes": "1073741824",
+            "requestedServiceObjectiveName": "[parameters('reMgrDBRequestedServiceObjectiveName')]"
           }
         }
       ]
