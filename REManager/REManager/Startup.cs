@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
+using REManager.DataAccess;
 
 namespace REManager
 {
@@ -25,6 +27,9 @@ namespace REManager
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connectionString = this.Configuration.GetConnectionString("ReMgrSQL");
+            services.AddDbContext<REPropertyDbContext>(options => options.UseSqlServer(connectionString));
+
             services.AddAuthentication(sharedOptions =>
             {
                 sharedOptions.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
