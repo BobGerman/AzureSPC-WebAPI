@@ -8,11 +8,11 @@
     },
     "branch": {
       "type": "string",
-      "defaultValue": "Step03a-ContinuousDeployment"
+      "defaultValue": "xxt"
     },
     "appServicePlanSkuName": {
       "type": "string",
-      "defaultValue": "F1",
+      "defaultValue": "S1",
       "allowedValues": [
         "F1",
         "D1",

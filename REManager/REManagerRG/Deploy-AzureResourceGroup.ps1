@@ -10,7 +10,8 @@ Param(
     [string] $TemplateParametersFile = 'azuredeploy.parameters.json',
     [string] $ArtifactStagingDirectory = '.',
     [string] $DSCSourceFolder = 'DSC',
-    [switch] $ValidateOnly
+    [switch] $ValidateOnly,
+	[string] $Branch = "Master"
 )
 
 try {
@@ -110,6 +111,7 @@ else {
                                        -TemplateFile $TemplateFile `
                                        -TemplateParameterFile $TemplateParametersFile `
                                        @OptionalParameters `
+									   -Branch $Branch `
                                        -Force -Verbose `
                                        -ErrorVariable ErrorMessages
     if ($ErrorMessages) {
