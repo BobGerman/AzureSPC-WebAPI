@@ -109,6 +109,9 @@
         "[concat('hidden-related:', resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName')))]": "Resource",
         "displayName": "webApi"
       },
+      "identity": {
+        "type": "SystemAssigned"
+      },
       "properties": {
         "name": "[variables('webApiName')]",
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
