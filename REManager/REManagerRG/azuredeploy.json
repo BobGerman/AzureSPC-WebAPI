@@ -129,6 +129,9 @@
           "dependsOn": [
             "[resourceId('Microsoft.Web/Sites', variables('webApiName'))]"
           ],
+          "tags": {
+            "displayName": "Github"
+          },
           "properties": {
             "RepoUrl": "[parameters('repoURL')]",
             "branch": "[parameters('branch')]",
