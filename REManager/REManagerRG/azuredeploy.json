@@ -127,19 +127,6 @@
       },
       "resources": [
         {
-          "name": "web",
-          "type": "sourcecontrols",
-          "apiVersion": "2015-08-01",
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/Sites', variables('webApiName'))]"
-          ],
-          "properties": {
-            "RepoUrl": "[parameters('repoURL')]",
-            "branch": "[parameters('branch')]",
-            "IsManualIntegration": true
-          }
-        },
-        {
           "name": "[parameters('stagingSlotName')]",
           "type": "slots",
           "apiVersion": "2015-08-01",
@@ -152,7 +139,21 @@
           ],
           "properties": {
           },
-          "resources": []
+          "resources": [
+            {
+              "name": "web",
+              "type": "sourcecontrols",
+              "apiVersion": "2015-08-01",
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/Sites/Slots', variables('webApiName'), parameters('stagingSlotName'))]"
+              ],
+              "properties": {
+                "RepoUrl": "[parameters('repoURL')]",
+                "branch": "[parameters('branch')]",
+                "IsManualIntegration": true
+              }
+            }
+          ]
         }
       ]
     },
