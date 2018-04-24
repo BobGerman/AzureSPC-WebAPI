@@ -72,6 +72,10 @@
       "metadata": {
         "description": "Describes the performance level for Edition"
       }
+    },
+    "stagingSlotName": {
+      "type": "string",
+      "defaultValue": "staging"
     }
   },
   "variables": {
@@ -134,6 +138,21 @@
             "branch": "[parameters('branch')]",
             "IsManualIntegration": true
           }
+        },
+        {
+          "name": "[parameters('stagingSlotName')]",
+          "type": "slots",
+          "apiVersion": "2015-08-01",
+          "tags": {
+            "displayName": "Staging Slot"
+          },
+          "location": "[resourceGroup().location]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', variables('webApiName'))]"
+          ],
+          "properties": {
+          },
+          "resources": []
         }
       ]
     },
