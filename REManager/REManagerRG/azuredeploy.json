@@ -113,9 +113,6 @@
         "[concat('hidden-related:', resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName')))]": "Resource",
         "displayName": "webApi"
       },
-      "identity": {
-        "type": "SystemAssigned"
-      },
       "properties": {
         "name": "[variables('webApiName')]",
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
@@ -127,83 +124,130 @@
       },
       "resources": [
         {
-          "name": "[parameters('stagingSlotName')]",
-          "type": "slots",
+          "name": "connectionstrings",
+          "type": "config",
           "apiVersion": "2015-08-01",
-          "tags": {
-            "displayName": "Staging Slot"
-          },
-          "location": "[resourceGroup().location]",
           "dependsOn": [
-            "[resourceId('Microsoft.Web/Sites', variables('webApiName'))]"
+            "[resourceId('Microsoft.Web/sites', variables('webApiName'))]"
           ],
+          "tags": {
+            "displayName": "ProdSettings"
+          },
           "properties": {
+            "ReMgrSQL": {
+              "type": "SQLAzure",
+              "value": "Server=tcp:remgr-staging.database.windows.net,1433;Initial Catalog=REMgrStagingDB;Persist Security Info=False;User ID=stagingSQLAdmin;Password=pass@word1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+            }
+          }
+        },
+          {
+            "name": "[parameters('stagingSlotName')]",
+            "type": "slots",
+            "apiVersion": "2015-08-01",
+            "tags": {
+              "displayName": "Staging Slot"
+            },
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+              "[resourceId('Microsoft.Web/Sites', variables('webApiName'))]"
+            ],
+            "properties": {
+            },
+            "resources": [
+              {
+                "name": "web",
+                "type": "sourcecontrols",
+                "apiVersion": "2015-08-01",
+                "dependsOn": [
+                  "[resourceId('Microsoft.Web/Sites/Slots', variables('webApiName'), parameters('stagingSlotName'))]"
+                ],
+                "tags": {
+                  "displayName": "Github deployment"
+                },
+                "properties": {
+                  "RepoUrl": "[parameters('repoURL')]",
+                  "branch": "[parameters('branch')]",
+                  "IsManualIntegration": true
+                }
+              },
+              {
+                "name": "connectionstrings",
+                "type": "config",
+                "apiVersion": "2015-08-01",
+                "dependsOn": [
+                  "[resourceId('Microsoft.Web/Sites/Slots', variables('webApiName'), parameters('stagingSlotName'))]"
+                ],
+                "tags": {
+                  "displayName": "ProdSettings"
+                },
+                "properties": {
+                  "ReMgrSQL": {
+                    "type": "SQLAzure",
+                    "value": "Server=tcp:remgr-staging.database.windows.net,1433;Initial Catalog=REMgrStagingDB;Persist Security Info=False;User ID=stagingSQLAdmin;Password=pass@word1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "apiVersion": "2015-08-01",
+            "name": "slotconfignames",
+            "type": "config",
+            "dependsOn": [
+              "[resourceId('Microsoft.Web/Sites', variables('webApiName'))]"
+            ],
+            "properties": {
+              "connectionStringNames": [ "ReMgrSQL" ]            }
+          }
+          ]
+        },
+        {
+          "name": "[variables('remgrsqlserverName')]",
+          "type": "Microsoft.Sql/servers",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2014-04-01-preview",
+          "dependsOn": [],
+          "tags": {
+            "displayName": "remgrsqlserver"
+          },
+          "properties": {
+            "administratorLogin": "[parameters('remgrsqlserverAdminLogin')]",
+            "administratorLoginPassword": "[parameters('remgrsqlserverAdminLoginPassword')]"
           },
           "resources": [
             {
-              "name": "web",
-              "type": "sourcecontrols",
-              "apiVersion": "2015-08-01",
+              "name": "AllowAllWindowsAzureIps",
+              "type": "firewallrules",
+              "location": "[resourceGroup().location]",
+              "apiVersion": "2014-04-01-preview",
               "dependsOn": [
-                "[resourceId('Microsoft.Web/Sites/Slots', variables('webApiName'), parameters('stagingSlotName'))]"
+                "[resourceId('Microsoft.Sql/servers', variables('remgrsqlserverName'))]"
               ],
               "properties": {
-                "RepoUrl": "[parameters('repoURL')]",
-                "branch": "[parameters('branch')]",
-                "IsManualIntegration": true
+                "startIpAddress": "0.0.0.0",
+                "endIpAddress": "0.0.0.0"
+              }
+            },
+            {
+              "name": "[parameters('reMgrDBName')]",
+              "type": "databases",
+              "location": "[resourceGroup().location]",
+              "apiVersion": "2014-04-01-preview",
+              "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', variables('remgrsqlserverName'))]"
+              ],
+              "tags": {
+                "displayName": "reMgrDB"
+              },
+              "properties": {
+                "collation": "[parameters('reMgrDBCollation')]",
+                "edition": "[parameters('reMgrDBEdition')]",
+                "maxSizeBytes": "1073741824",
+                "requestedServiceObjectiveName": "[parameters('reMgrDBRequestedServiceObjectiveName')]"
               }
             }
           ]
         }
-      ]
-    },
-    {
-      "name": "[variables('remgrsqlserverName')]",
-      "type": "Microsoft.Sql/servers",
-      "location": "[resourceGroup().location]",
-      "apiVersion": "2014-04-01-preview",
-      "dependsOn": [ ],
-      "tags": {
-        "displayName": "remgrsqlserver"
-      },
-      "properties": {
-        "administratorLogin": "[parameters('remgrsqlserverAdminLogin')]",
-        "administratorLoginPassword": "[parameters('remgrsqlserverAdminLoginPassword')]"
-      },
-      "resources": [
-        {
-          "name": "AllowAllWindowsAzureIps",
-          "type": "firewallrules",
-          "location": "[resourceGroup().location]",
-          "apiVersion": "2014-04-01-preview",
-          "dependsOn": [
-            "[resourceId('Microsoft.Sql/servers', variables('remgrsqlserverName'))]"
-          ],
-          "properties": {
-            "startIpAddress": "0.0.0.0",
-            "endIpAddress": "0.0.0.0"
-          }
-        },
-        {
-          "name": "[parameters('reMgrDBName')]",
-          "type": "databases",
-          "location": "[resourceGroup().location]",
-          "apiVersion": "2014-04-01-preview",
-          "dependsOn": [
-            "[resourceId('Microsoft.Sql/servers', variables('remgrsqlserverName'))]"
-          ],
-          "tags": {
-            "displayName": "reMgrDB"
-          },
-          "properties": {
-            "collation": "[parameters('reMgrDBCollation')]",
-            "edition": "[parameters('reMgrDBEdition')]",
-            "maxSizeBytes": "1073741824",
-            "requestedServiceObjectiveName": "[parameters('reMgrDBRequestedServiceObjectiveName')]"
-          }
-        }
-      ]
-    }
-  ],
+      ],
   "outputs": {}
 }

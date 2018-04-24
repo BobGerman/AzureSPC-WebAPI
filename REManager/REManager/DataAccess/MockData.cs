@@ -12,7 +12,7 @@ namespace REManager
         {
             new REProperty {
                 Id = 1,
-                Name = "Beautiful bungalow",
+                Name = "NEW VERSION Beautiful bungalow",
                 Address = "5 Wayside Road",
                 Unit = "",
                 City = "Burlington",
