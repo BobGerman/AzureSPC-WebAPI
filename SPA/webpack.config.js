@@ -4,7 +4,7 @@ const path = require('path');
 module.exports = {
     //entry can be an array and an include multiple files
     entry: {
-        bundleClassic: "./src/bootHeaderFooter.ts"
+        bundleClassic: "./src/bootApp.ts"
     },
     output: {
         path: path.resolve(__dirname, 'build'),
