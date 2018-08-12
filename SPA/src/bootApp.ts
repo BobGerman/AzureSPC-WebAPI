@@ -6,17 +6,15 @@ export class bootstrapper {
 
   public onInit(): void {
 
-    // Create the div elements to hold the header and footer
-    const header = document.createElement("div");
-    const footer = document.createElement("div");
-
-    // Insert the header and footer on the page
     const workspace = document.getElementById('spaContainer');
+    // Hard-coded for now
+    const endpointUrl = 'https://remgrwebapirg6mawh7cyslk.azurewebsites.net/api/REProperties/';
+    const clientId = '82deab78-7ff2-4e90-baec-83206f937e50';
+
     if (workspace) {
 
-      // Get the header and footer data and render it
-      const service = ReManagerServiceFactory.getService(true);
-      service.getReProperties(null, null)
+      const service = ReManagerServiceFactory.getService(false);
+      service.getReProperties(clientId, endpointUrl)
         .then ((data: IReProperty[]) => {
           ComponentManager.render(workspace, workspace, data);
         })

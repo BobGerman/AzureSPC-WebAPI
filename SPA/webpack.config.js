@@ -42,7 +42,8 @@ module.exports = {
     },
     externals: {
         'react': 'React',
-        'react-dom': 'ReactDOM'
+        'react-dom': 'ReactDOM',
+        'adal-angular': 'AuthenticationContext'
     },
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx']
