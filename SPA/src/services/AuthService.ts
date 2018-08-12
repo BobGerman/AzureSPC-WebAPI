@@ -3,18 +3,17 @@ import * as AuthenticationContext from 'adal-angular';
 
 export default class AuthService {
 
-    private authContext: AuthenticationContext = null;
-    private config: AuthenticationContext.Options = null;
+    private authContext: AuthenticationContext;
+    private config: AuthenticationContext.Options;
+    private resourceId: string;
 
     // TODO: Pass in tenant, clientId, and endpoints collection
     constructor() {
 
+        this.resourceId = '63029ef5-80fc-43be-b586-6cd4053f85c2';//this.config.endpoints['reMgr'];
         this.config = {
-            tenant: 'a25d4ef1-c73a-4dc1-bdb1-9a342260f216',
+            tenant: 'bgtest18.onmicrosoft.com',
             clientId: '82deab78-7ff2-4e90-baec-83206f937e50',
-            endpoints: {
-                'reMgr': 'https://remanagerws.azurewebsites.net'
-            },
             redirectUri: 'http://localhost:8080',
             cacheLocation: 'localStorage'
         };
@@ -22,20 +21,18 @@ export default class AuthService {
 
     }
 
-    // Pass client id etc here:
     public getToken(): Promise<string> {
 
         return new Promise<string>((resolve, reject) => {
 
             if (this.ensureLogin()) {
-                const endpoint = this.config.endpoints['reMgr'];
 
-                let cachedToken = this.authContext.getCachedToken(endpoint);
+                let cachedToken = this.authContext.getCachedToken(this.resourceId);
                 if (cachedToken) {
                     resolve(cachedToken);
                 } else {
                     this.authContext.acquireToken(
-                        endpoint,
+                        this.resourceId,
                         (error, acquiredToken) => {
                             if (error || !acquiredToken) {
                                 reject(error);
@@ -55,7 +52,8 @@ export default class AuthService {
     private ensureLogin(): boolean {
 
         var isCallback = this.authContext.isCallback(window.location.hash);
-        if (isCallback && this.authContext.getLoginError()) {
+
+        if (isCallback && !this.authContext.getLoginError()) {
             this.authContext.handleWindowCallback(window.location.hash);
         } else {
             var user = this.authContext.getCachedUser();
