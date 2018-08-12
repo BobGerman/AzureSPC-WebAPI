@@ -13,22 +13,46 @@ export default class MockReManagerService implements IReManagerService {
             const authSvc = new AuthService();
             authSvc.getToken()
             .then((token) => {
-                resolve ([
+
+                fetch(
+                    'https://remgrwebapirg6mawh7cyslk.azurewebsites.net/api/REProperties/',
                     {
-                        "id": 1,
-                        "name": 'TOKEN: ' + token,
-                        "address": "5 Happy Street",
-                        "unit": "",
-                        "city": "Burlington",
-                        "state": "MA",
-                        "postalCode": "01803",
-                        "country": null,
-                        "purchaseDate": "2010-12-03T00:00:00",
-                        "purchaseAmount": 344000,
-                        "isForSale": false,
-                        "isForRent": false
+                        method: "GET",
+                        mode: "cors",
+                        cache: "no-cache",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": "Bearer " + token
+                        }
                     }
-                ]);
+                )
+                .then ((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                })
+                .then ((json) => {
+                    resolve(json);
+                })
+                .catch ((error) => {
+                    resolve ([
+                        {
+                            "id": 1,
+                            "name": 'TOKEN: ' + token,
+                            "address": "5 Happy Street",
+                            "unit": "",
+                            "city": "Burlington",
+                            "state": "MA",
+                            "postalCode": "01803",
+                            "country": null,
+                            "purchaseDate": "2010-12-03T00:00:00",
+                            "purchaseAmount": 344000,
+                            "isForSale": false,
+                            "isForRent": false
+                        }
+                    ]);
+                });
+
             })
             .catch((error) => {
                 resolve ([
