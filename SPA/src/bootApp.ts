@@ -8,13 +8,15 @@ export class bootstrapper {
 
     const workspace = document.getElementById('spaContainer');
     // Hard-coded for now
-    const endpointUrl = 'https://remgrwebapirg6mawh7cyslk.azurewebsites.net/api/REProperties/';
+    const tenant = 'bgtest18.onmicrosoft.com';
     const clientId = '82deab78-7ff2-4e90-baec-83206f937e50';
+    const resourceId = '63029ef5-80fc-43be-b586-6cd4053f85c2';
+    const endpointUrl = 'https://remgrwebapirg6mawh7cyslk.azurewebsites.net';
 
     if (workspace) {
 
       const service = ReManagerServiceFactory.getService(false);
-      service.getReProperties(clientId, endpointUrl)
+      service.getReProperties(tenant, clientId, resourceId, endpointUrl)
         .then ((data: IReProperty[]) => {
           ComponentManager.render(workspace, workspace, data);
         })

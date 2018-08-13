@@ -7,13 +7,12 @@ export default class AuthService {
     private config: AuthenticationContext.Options;
     private resourceId: string;
 
-    // TODO: Pass in tenant, clientId, and endpoints collection
-    constructor() {
+    constructor(tenant: string, clientId: string, resourceId: string) {
 
-        this.resourceId = '63029ef5-80fc-43be-b586-6cd4053f85c2';//this.config.endpoints['reMgr'];
+        this.resourceId = resourceId;
         this.config = {
-            tenant: 'bgtest18.onmicrosoft.com',
-            clientId: '82deab78-7ff2-4e90-baec-83206f937e50',
+            tenant: tenant,
+            clientId: clientId,
             redirectUri: 'http://localhost:8080',
             cacheLocation: 'localStorage'
         };

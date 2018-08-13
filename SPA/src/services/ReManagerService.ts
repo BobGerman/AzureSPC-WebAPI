@@ -2,20 +2,22 @@ import { IReProperty } from '../model/IReProperty';
 import { IReManagerService } from './IReManagerService';
 import AuthService from './AuthService';
 
-export default class MockReManagerService implements IReManagerService {
+export default class ReManagerService implements IReManagerService {
     
-    public getReProperties (clientId: string, 
+    public getReProperties (tenant: string,
+                            clientId: string, 
+                            resourceId: string,
                             endpointUrl: string):
         Promise<IReProperty[] | string> {
 
         return new Promise<IReProperty[]> ((resolve, reject) => {
 
-            const authSvc = new AuthService();
+            const authSvc = new AuthService(tenant, clientId, resourceId);
             authSvc.getToken()
             .then((token) => {
 
                 fetch(
-                    'https://remgrwebapirg6mawh7cyslk.azurewebsites.net/api/REProperties/',
+                    `${endpointUrl}/api/REProperties/`,
                     {
                         method: "GET",
                         mode: "cors",
@@ -38,15 +40,15 @@ export default class MockReManagerService implements IReManagerService {
                     resolve ([
                         {
                             "id": 1,
-                            "name": 'TOKEN: ' + token,
-                            "address": "5 Happy Street",
+                            "name": `Error ${error} using token ${token}`,
+                            "address": "",
                             "unit": "",
-                            "city": "Burlington",
-                            "state": "MA",
-                            "postalCode": "01803",
+                            "city": "",
+                            "state": "",
+                            "postalCode": "",
                             "country": null,
                             "purchaseDate": "2010-12-03T00:00:00",
-                            "purchaseAmount": 344000,
+                            "purchaseAmount": 0,
                             "isForSale": false,
                             "isForRent": false
                         }
