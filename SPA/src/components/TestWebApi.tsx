@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { ITestWebApiProps } from './ITestWebApiProps';
+require ('./TestWebApi.scss');
 
 export default class TestWebApi extends React.Component<ITestWebApiProps, {}> {
   public render(): React.ReactElement<ITestWebApiProps> {
