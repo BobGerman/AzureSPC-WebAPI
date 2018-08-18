@@ -13,7 +13,7 @@ export default class AuthService {
         this.config = {
             tenant: tenant,
             clientId: clientId,
-            redirectUri: 'http://localhost:8080',
+            redirectUri: window.location.href,
             cacheLocation: 'localStorage'
         };
         this.authContext = new AuthenticationContext(this.config);
